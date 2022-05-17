@@ -13,6 +13,12 @@ type ServerPool struct {
 	current  uint64
 }
 
+func NewServerPool() *ServerPool {
+	return &ServerPool{
+		backends: make([]*Backend, 0),
+	}
+}
+
 // AddBackend to the server pool
 func (s *ServerPool) AddBackend(backend *Backend) {
 	s.backends = append(s.backends, backend)

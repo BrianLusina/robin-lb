@@ -1,23 +1,24 @@
 package entities
 
 import (
-	"net/http/httputil"
 	"net/url"
 	"sync"
+
+	"github.com/brianlusina/robin-lb/app/internal/core/services"
 )
 
 type Backend struct {
 	URL          *url.URL
 	Alive        bool
 	mux          sync.RWMutex
-	ReverseProxy *httputil.ReverseProxy
+	ReverseProxy services.ProxyService
 }
 
-func NewBackend(url *url.URL, alive bool, proxy *httputil.ReverseProxy) *Backend {
+func NewBackend(url *url.URL, alive bool, reverseProxy services.ProxyService) *Backend {
 	return &Backend{
 		URL:          url,
 		Alive:        alive,
-		ReverseProxy: proxy,
+		ReverseProxy: reverseProxy,
 	}
 }
 

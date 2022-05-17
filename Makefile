@@ -18,7 +18,7 @@ tidy:
 
 # Runs project
 run:
-	go run app/cmd/main.go
+	go run app/cmd/server/main.go
 
 test:
 	go test ./...
@@ -37,6 +37,6 @@ lint:
 
 build:
 	@echo "Building application"
-	go build -o $(BIN_DIR) cmd/main.go
+	go build -o $(BIN_DIR)/robinlb app/cmd/server/main.go
 
 all: install lint test
