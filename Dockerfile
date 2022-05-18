@@ -1,25 +1,24 @@
-FROM golang:1.18 AS builder
+FROM golang:1.18.2-alpine3.15 AS builder
+
+# hadolint ignore=DL3018
+RUN apk update && \
+    apk --update --no-cache add git make
+
 WORKDIR /app
-COPY main.go go.mod ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o robinlb .
+
+COPY . ./
+
+RUN CGO_ENABLED=0 GOOS=linux go build -mod=mod -o robinlb app/cmd/server/main.go
 
 FROM alpine:3.15.4
 
 # hadolint ignore=DL3018
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /root
+WORKDIR /app
 
-ARG CONTAINER_USER_NAME=robinlb-user
+EXPOSE 3030
 
-# Create non-root user
-# hadolint ignore=SC2015
-RUN set -xe \
-    && addgroup --system ${CONTAINER_USER_NAME} || true \
-    && adduser --system --disabled-login --ingroup ${CONTAINER_USER_NAME} --home /home/${CONTAINER_USER_NAME} --gecos "${CONTAINER_USER_NAME} user" --shell /bin/false  ${CONTAINER_USER_NAME} || true
+COPY --from=builder /app/robinlb .
 
-# Use non-root user and start
-USER $CONTAINER_USER_NAME
-
-COPY --from=builder /app/lb .
-ENTRYPOINT [ "/root/robinlb" ]
+ENTRYPOINT [ "/app/robinlb" ]
