@@ -46,7 +46,7 @@ func (s *service) ServeRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	peer.ReverseProxy.ServeHTTP(w, r)
+	peer.ReverseProxy.ServeHTTPRequest(w, r)
 	return
 }
 

@@ -28,7 +28,7 @@ func New(serverUrl *url.URL, handler http.HandlerFunc, serverPool services.Robin
 	}
 }
 
-func (p *service) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (p *service) ServeHTTPRequest(w http.ResponseWriter, r *http.Request) {
 	p.ServeHTTP(w, r)
 }
 

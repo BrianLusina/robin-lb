@@ -11,5 +11,5 @@ type RobinService interface {
 }
 
 type ProxyService interface {
-	ServeHTTP(w http.ResponseWriter, r *http.Request)
+	ServeHTTPRequest(w http.ResponseWriter, r *http.Request)
 }
