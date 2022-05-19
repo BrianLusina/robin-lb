@@ -27,7 +27,7 @@ func main() {
 
 	servers := strings.Split(serverList, ",")
 	serverPool := robinsrv.New()
-	lb := lb.NewLbHandler(serverPool)
+	lb := lb.NewHandler(serverPool)
 
 	for _, server := range servers {
 		serverURL, err := url.Parse(server)

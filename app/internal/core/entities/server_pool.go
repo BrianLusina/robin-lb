@@ -8,11 +8,13 @@ import (
 	"github.com/brianlusina/robin-lb/app/pkg"
 )
 
+// ServerPool is a collection of backends
 type ServerPool struct {
 	backends []*Backend
 	current  uint64
 }
 
+// NewServerPool creates a new server pool
 func NewServerPool() *ServerPool {
 	return &ServerPool{
 		backends: make([]*Backend, 0),
@@ -32,7 +34,7 @@ func (s *ServerPool) NextIndex() int {
 	return int(atomic.AddUint64(&s.current, uint64(1)) % uint64(len(s.backends)))
 }
 
-// GetNextPeer returns next active peer from the server pool
+// GetNextActivePeer returns next active peer from the server pool
 func (s *ServerPool) GetNextActivePeer() *Backend {
 	// loop entire backends to find out an alive backend
 	next := s.NextIndex()
@@ -70,9 +72,10 @@ func (s *ServerPool) HealthCheck() {
 	}
 }
 
-func (s *ServerPool) MarkBackendStatus(backendUrl *url.URL, alive bool) {
+// MarkBackendAlive marks a backend as alive
+func (s *ServerPool) MarkBackendStatus(backendURL *url.URL, alive bool) {
 	for _, b := range s.backends {
-		if b.URL.String() == backendUrl.String() {
+		if b.URL.String() == backendURL.String() {
 			b.SetAlive(alive)
 			break
 		}

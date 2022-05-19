@@ -2,7 +2,10 @@ package tools
 
 import "context"
 
+// Attempts is the number of attempts
 type Attempts int
+
+// Retry is the number of retries
 type Retry int
 
 const (
@@ -10,7 +13,7 @@ const (
 	RetryKey
 )
 
-// GetAttemptsFromContext returns the attempts for request
+// GetAttemptsFromContext returns the number of attempts from the context
 func GetAttemptsFromContext(ctx context.Context) Attempts {
 	attempts, ok := ctx.Value(AttemptsKey).(Attempts)
 	if !ok {
@@ -19,7 +22,7 @@ func GetAttemptsFromContext(ctx context.Context) Attempts {
 	return attempts
 }
 
-// GetAttemptsFromContext returns the attempts for request
+// GetRetryFromContext returns the retry attempts from a context
 func GetRetryFromContext(ctx context.Context) Retry {
 	if retry, ok := ctx.Value(RetryKey).(Retry); ok {
 		return retry

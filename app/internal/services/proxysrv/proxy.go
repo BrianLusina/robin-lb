@@ -14,27 +14,29 @@ import (
 
 type service struct {
 	*httputil.ReverseProxy
-	serverUrl  *url.URL
+	serverURL  *url.URL
 	serverPool services.RobinService
 	handler    http.HandlerFunc
 }
 
 // New returns a new Proxy service
-func New(serverUrl *url.URL, handler http.HandlerFunc, serverPool services.RobinService) *service {
+func New(serverURL *url.URL, handler http.HandlerFunc, serverPool services.RobinService) *service {
 	return &service{
-		ReverseProxy: httputil.NewSingleHostReverseProxy(serverUrl),
-		serverUrl:    serverUrl,
+		ReverseProxy: httputil.NewSingleHostReverseProxy(serverURL),
+		serverURL:    serverURL,
 		serverPool:   serverPool,
 	}
 }
 
+// ServeHTTPRequest is the reverse proxy handler
 func (p *service) ServeHTTPRequest(w http.ResponseWriter, r *http.Request) {
 	p.ServeHTTP(w, r)
 }
 
+// AddErroHandler adds an error handler to the revers proxy
 func (p *service) AddErrorHandler() {
 	p.ErrorHandler = func(writer http.ResponseWriter, request *http.Request, e error) {
-		log.Printf("[%s] %s\n", p.serverUrl.Host, e.Error())
+		log.Printf("[%s] %s\n", p.serverURL.Host, e.Error())
 		retries := tools.GetRetryFromContext(request.Context())
 
 		if retries < 3 {
@@ -46,7 +48,7 @@ func (p *service) AddErrorHandler() {
 		}
 
 		// after 3 retries, mark this backend as down
-		p.serverPool.MarkBackendStatus(p.serverUrl, false)
+		p.serverPool.MarkBackendStatus(p.serverURL, false)
 
 		// if the same request routing for few attempts with different backends, increase the count
 		attempts := tools.GetAttemptsFromContext(request.Context())

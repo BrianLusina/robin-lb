@@ -23,9 +23,9 @@ func New() *service {
 	}
 }
 
-// AddBackend to the server pool
-func (s *service) AddBackend(serverUrl *url.URL, alive bool, proxySvc services.ProxyService) {
-	backend := entities.NewBackend(serverUrl, alive, proxySvc)
+// AddBackend adds a new backend to the server pool
+func (s *service) AddBackend(serverURL *url.URL, alive bool, proxySvc services.ProxyService) {
+	backend := entities.NewBackend(serverURL, alive, proxySvc)
 	s.backends = append(s.backends, backend)
 }
 
