@@ -26,7 +26,7 @@ jobs:
       with:
         # list of Docker images to use as base name for tags
         images: |
-          ${{ secrets.DOCKER_REGISTRY }}/robinlb
+          ${{ secrets.DOCKER_REGISTRY }}/robin-lb
           ghcr.io/${{ github.repository }}
         # generate Docker tags based on the following events/attributes
         tags: |
