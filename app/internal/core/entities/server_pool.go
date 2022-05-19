@@ -72,7 +72,7 @@ func (s *ServerPool) HealthCheck() {
 	}
 }
 
-// MarkBackendAlive marks a backend as alive
+// MarkBackendStatus marks a backend as alive
 func (s *ServerPool) MarkBackendStatus(backendURL *url.URL, alive bool) {
 	for _, b := range s.backends {
 		if b.URL.String() == backendURL.String() {

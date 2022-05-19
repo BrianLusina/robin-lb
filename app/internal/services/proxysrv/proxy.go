@@ -12,7 +12,7 @@ import (
 	"github.com/brianlusina/robin-lb/app/tools"
 )
 
-type service struct {
+type Service struct {
 	*httputil.ReverseProxy
 	serverURL  *url.URL
 	serverPool services.RobinService
@@ -20,8 +20,8 @@ type service struct {
 }
 
 // New returns a new Proxy service
-func New(serverURL *url.URL, handler http.HandlerFunc, serverPool services.RobinService) *service {
-	return &service{
+func New(serverURL *url.URL, handler http.HandlerFunc, serverPool services.RobinService) *Service {
+	return &Service{
 		ReverseProxy: httputil.NewSingleHostReverseProxy(serverURL),
 		serverURL:    serverURL,
 		serverPool:   serverPool,
@@ -29,12 +29,12 @@ func New(serverURL *url.URL, handler http.HandlerFunc, serverPool services.Robin
 }
 
 // ServeHTTPRequest is the reverse proxy handler
-func (p *service) ServeHTTPRequest(w http.ResponseWriter, r *http.Request) {
+func (p *Service) ServeHTTPRequest(w http.ResponseWriter, r *http.Request) {
 	p.ServeHTTP(w, r)
 }
 
 // AddErroHandler adds an error handler to the revers proxy
-func (p *service) AddErrorHandler() {
+func (p *Service) AddErrorHandler() {
 	p.ErrorHandler = func(writer http.ResponseWriter, request *http.Request, e error) {
 		log.Printf("[%s] %s\n", p.serverURL.Host, e.Error())
 		retries := tools.GetRetryFromContext(request.Context())

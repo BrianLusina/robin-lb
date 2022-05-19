@@ -11,20 +11,22 @@ import (
 	"github.com/brianlusina/robin-lb/app/pkg"
 )
 
-type service struct {
+// Service is the server pool
+type Service struct {
 	backends []*entities.Backend
 	current  uint64
 }
 
-func New() *service {
+// New creates a new server pool
+func New() *Service {
 	backends := []*entities.Backend{}
-	return &service{
+	return &Service{
 		backends: backends,
 	}
 }
 
 // AddBackend adds a new backend to the server pool
-func (s *service) AddBackend(serverURL *url.URL, alive bool, proxySvc services.ProxyService) {
+func (s *Service) AddBackend(serverURL *url.URL, alive bool, proxySvc services.ProxyService) {
 	backend := entities.NewBackend(serverURL, alive, proxySvc)
 	s.backends = append(s.backends, backend)
 }
@@ -33,12 +35,12 @@ func (s *service) AddBackend(serverURL *url.URL, alive bool, proxySvc services.P
 // we increase the current value by one atomically and return the index by modding with the length of the slice.
 // Which means the value always will be between 0 and length of the slice.
 // In the end, we are interested in a particular index, not the total count.
-func (s *service) NextIndex() int {
+func (s *Service) NextIndex() int {
 	return int(atomic.AddUint64(&s.current, uint64(1)) % uint64(len(s.backends)))
 }
 
 // ServeRequest forwards the request to the next available backend
-func (s *service) ServeRequest(w http.ResponseWriter, r *http.Request) {
+func (s *Service) ServeRequest(w http.ResponseWriter, r *http.Request) {
 	peer := s.GetNextActivePeer()
 	if peer == nil {
 		log.Println("No active peer found")
@@ -50,7 +52,7 @@ func (s *service) ServeRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetNextPeer returns next active peer from the server pool
-func (s *service) GetNextActivePeer() *entities.Backend {
+func (s *Service) GetNextActivePeer() *entities.Backend {
 	// loop entire backends to find out an alive backend
 	next := s.NextIndex()
 
@@ -74,7 +76,7 @@ func (s *service) GetNextActivePeer() *entities.Backend {
 }
 
 // HealthCheck pings the backends and updates the status
-func (s *service) HealthCheck() {
+func (s *Service) HealthCheck() {
 	for _, b := range s.backends {
 		status := "up"
 		alive := pkg.IsBackendAlive(b.URL)
@@ -87,7 +89,7 @@ func (s *service) HealthCheck() {
 	}
 }
 
-func (s *service) MarkBackendStatus(backendUrl *url.URL, alive bool) {
+func (s *Service) MarkBackendStatus(backendUrl *url.URL, alive bool) {
 	for _, b := range s.backends {
 		if b.URL.String() == backendUrl.String() {
 			b.SetAlive(alive)

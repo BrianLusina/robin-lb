@@ -9,7 +9,9 @@ type Attempts int
 type Retry int
 
 const (
+	// AttemptsKey is the key for the number of attempts
 	AttemptsKey Attempts = iota
+	// RetryKey is the key for the number of retries
 	RetryKey
 )
 
