@@ -1,5 +1,7 @@
 # Robin LB
 
+[![License](https://img.shields.io/github/license/brianlusina/robin-lb)](https://github.com/brianlusina/robin-lb/blob/main/LICENSE)
+[![Version](https://img.shields.io/github/v/release/brianlusina/robin-lb?color=%235351FB&label=version)](https://github.com/brianlusina/robin-lb/releases)
 [![Tests](https://github.com/BrianLusina/robin-lb/actions/workflows/tests.yml/badge.svg)](https://github.com/BrianLusina/robin-lb/actions/workflows/tests.yml)
 [![Lint](https://github.com/BrianLusina/robin-lb/actions/workflows/lint.yml/badge.svg)](https://github.com/BrianLusina/robin-lb/actions/workflows/lint.yml)
 [![Build](https://github.com/BrianLusina/robin-lb/actions/workflows/build_app.yml/badge.svg)](https://github.com/BrianLusina/robin-lb/actions/workflows/build_app.yml)
