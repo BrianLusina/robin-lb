@@ -2,7 +2,7 @@ BIN_DIR = $(PWD)/bin
 
 # Will setup linting tools
 setup-linting:
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./bin v1.46.1
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./bin v1.46.2
 	chmod +x ./bin/golangci-lint
 
 lint-docker:
