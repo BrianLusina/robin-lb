@@ -27,6 +27,4 @@ func (lb *lbHandler) LoadBalance(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lb.serverPool.ServeRequest(w, r)
-
-	http.Error(w, "Service not available", http.StatusServiceUnavailable)
 }
