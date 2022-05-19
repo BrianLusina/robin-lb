@@ -51,13 +51,10 @@ func main() {
 	// performs a healthcheck on the server pool to check on status of backends every 2 mins
 	go func() {
 		t := time.NewTicker(time.Minute * 2)
-		for {
-			select {
-			case <-t.C:
-				log.Println("Starting health check...")
-				serverPool.HealthCheck()
-				log.Println("Health check completed")
-			}
+		for range t.C {
+			log.Println("Starting health check...")
+			serverPool.HealthCheck()
+			log.Println("Health check completed")
 		}
 	}()
 

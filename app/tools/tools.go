@@ -2,14 +2,17 @@ package tools
 
 import "context"
 
+type Attempts int
+type Retry int
+
 const (
-	Attempts int = iota
-	Retry
+	AttemptsKey Attempts = iota
+	RetryKey
 )
 
 // GetAttemptsFromContext returns the attempts for request
-func GetAttemptsFromContext(ctx context.Context) int {
-	attempts, ok := ctx.Value(Attempts).(int)
+func GetAttemptsFromContext(ctx context.Context) Attempts {
+	attempts, ok := ctx.Value(AttemptsKey).(Attempts)
 	if !ok {
 		return 0
 	}
@@ -17,8 +20,8 @@ func GetAttemptsFromContext(ctx context.Context) int {
 }
 
 // GetAttemptsFromContext returns the attempts for request
-func GetRetryFromContext(ctx context.Context) int {
-	if retry, ok := ctx.Value(Retry).(int); ok {
+func GetRetryFromContext(ctx context.Context) Retry {
+	if retry, ok := ctx.Value(RetryKey).(Retry); ok {
 		return retry
 	}
 	return 0

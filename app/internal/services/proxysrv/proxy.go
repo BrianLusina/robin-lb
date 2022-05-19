@@ -38,9 +38,8 @@ func (p *service) AddErrorHandler() {
 		retries := tools.GetRetryFromContext(request.Context())
 
 		if retries < 3 {
-			select {
-			case <-time.After(10 * time.Millisecond):
-				ctx := context.WithValue(request.Context(), tools.Retry, retries+1)
+			for range time.After(10 * time.Millisecond) {
+				ctx := context.WithValue(request.Context(), tools.RetryKey, retries+1)
 				p.ServeHTTP(writer, request.WithContext(ctx))
 			}
 			return
@@ -53,7 +52,7 @@ func (p *service) AddErrorHandler() {
 		attempts := tools.GetAttemptsFromContext(request.Context())
 
 		log.Printf("%s(%s) Attempting retry %d\n", request.RemoteAddr, request.URL.Path, attempts)
-		ctx := context.WithValue(request.Context(), tools.Attempts, attempts+1)
+		ctx := context.WithValue(request.Context(), tools.AttemptsKey, attempts+1)
 
 		p.handler(writer, request.WithContext(ctx))
 	}

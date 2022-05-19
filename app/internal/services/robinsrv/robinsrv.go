@@ -47,7 +47,6 @@ func (s *service) ServeRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	peer.ReverseProxy.ServeHTTPRequest(w, r)
-	return
 }
 
 // GetNextPeer returns next active peer from the server pool
